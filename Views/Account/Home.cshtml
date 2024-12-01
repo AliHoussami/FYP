@@ -1,0 +1,342 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ordering System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 15px 0;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 1.8rem;
+            }
+
+            header nav a {
+                color: #fff;
+                margin: 0 15px;
+                text-decoration: none;
+            }
+
+                header nav a:hover {
+                    text-decoration: underline;
+                }
+
+        .hero-section {
+            background: url('/IMAGE/hero-food.jpg') center/cover no-repeat;
+            height: 450px;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+            .hero-section h1 {
+                font-size: 3.5rem;
+                font-weight: bold;
+            }
+
+            .hero-section p {
+                font-size: 1.2rem;
+                margin-top: 20px;
+            }
+
+            .hero-section button {
+                margin-top: 20px;
+                padding: 12px 40px;
+                font-size: 1.2rem;
+            }
+
+        /* Trending Restaurants */
+        .trending-section {
+            padding: 50px 0;
+            background: #fff;
+        }
+
+            .trending-section h2 {
+                text-align: center;
+                font-size: 2.5rem;
+                color: #333;
+                margin-bottom: 30px;
+            }
+
+        .trending-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Ensures proper spacing between elements */
+            height: 100%; /* Make all cards the same height */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center; /* Centers content inside the card */
+        }
+
+            .trending-card img {
+                width: 100%; /* Make the image take full width */
+                height: 200px; /* Set consistent height for all images */
+                object-fit: cover; /* Ensures images maintain aspect ratio and fill the space */
+            }
+
+            .trending-card .details {
+                flex-grow: 1; /* Ensures the details section stretches evenly */
+                padding: 15px;
+            }
+
+            .trending-card h5 {
+                font-size: 1.2rem;
+                font-weight: bold;
+                margin-bottom: 10px; /* Space below the title */
+            }
+
+            .trending-card p {
+                font-size: 0.95rem;
+                color: #777;
+                margin-bottom: 15px; /* Space below the description */
+            }
+
+            .trending-card button {
+                margin-top: auto; /* Push the button to the bottom */
+                padding: 10px 20px;
+                font-size: 1rem;
+                border: none;
+                border-radius: 5px;
+                background-color: #28a745;
+                color: white;
+                cursor: pointer;
+            }
+
+                .trending-card button:hover {
+                    background-color: #218838;
+                }
+
+        /* Restaurants List */
+        .restaurants-section {
+            padding: 50px 0;
+        }
+
+            .restaurants-section h2 {
+                text-align: center;
+                font-size: 2.5rem;
+                color: #333;
+                margin-bottom: 30px;
+            }
+
+        .restaurant-item {
+            display: flex;
+            align-items: center;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: box-shadow 0.3s;
+        }
+
+            .restaurant-item:hover {
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            }
+
+            .restaurant-item img {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+            }
+
+            .restaurant-item .info {
+                flex-grow: 1;
+                padding: 15px;
+            }
+
+                .restaurant-item .info h5 {
+                    font-size: 1.3rem;
+                    margin: 0;
+                }
+
+                .restaurant-item .info p {
+                    margin: 10px 0;
+                    color: #555;
+                }
+
+                .restaurant-item .info .rating {
+                    color: #ffc107;
+                }
+
+            .restaurant-item .order-button {
+                padding: 15px;
+            }
+
+                .restaurant-item .order-button button {
+                    padding: 10px 20px;
+                }
+
+        /* Footer */
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container d-flex justify-content-between align-items-center">
+            <h1>LEBEATS</h1>
+            <nav>
+                <a href="#">Home</a>
+                <a href="#trending">Trending</a>
+                <a href="#restaurants">Restaurants</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div>
+            <h1>Discover the Best Food Near You!</h1>
+            <p>Order from top-rated restaurants and get your food delivered fast.</p>
+            <button class="btn btn-primary">Order Now</button>
+        </div>
+    </section>
+
+    <!-- Trending Restaurants -->
+    <section class="trending-section" id="trending">
+        <div class="container">
+            <h2>Trending Restaurants</h2>
+            <div class="row g-4" id="trending-restaurants">
+                <!-- Dynamic trending restaurants will be loaded here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Restaurants List -->
+    <section class="restaurants-section" id="restaurants">
+        <div class="container">
+            <h2>All Restaurants</h2>            
+                
+            </div>
+        </div>
+    </section>
+    
+    
+
+    <!-- Contact Section -->
+    <section id="contact" style="padding: 50px 0; background-color: #f1f1f1;">
+        <div class="container text-center">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or feedback, feel free to reach out to us via the following channels:</p>
+            <p><strong>Email:</strong> contact@LEBEATS.com</p>
+            <p><strong>Phone:</strong> 01 111 111</p>
+            <p><strong>Address:</strong> 123 Food Street, Foodie City, FC 45678</p>
+            <p>Follow us on our social media platforms to stay updated!</p>
+            <div>
+                <a href="#" class="btn btn-primary mx-2">Facebook</a>
+                <a href="#" class="btn btn-secondary mx-2">Instagram</a>
+                <a href="#" class="btn btn-info mx-2">Twitter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 Foodie Paradise. All rights reserved.</p>
+        <p>
+            Follow us on
+            <a href="#" class="text-white">Facebook</a>,
+            <a href="#" class="text-white">Instagram</a>, and
+            <a href="#" class="text-white">Twitter</a>.
+        </p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/restaurants') // Fetch all restaurants
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.querySelector('.restaurants-section .container');
+
+                    // Loop through each restaurant and create the HTML
+                    data.forEach(restaurant => {
+                        const restaurantItem = `
+                                    <div class="restaurant-item">
+                                        <img src="${restaurant.imageUrl || '/Images/default-restaurant.jpg'}" alt="${restaurant.restaurantName}" class="restaurant-img">
+                                        <div class="info">
+                                            <h5>${restaurant.restaurantName}</h5>
+                                            <p>${restaurant.description || 'No description available.'}</p>
+                                            <div>
+                                                <span class="rating">${'★'.repeat(Math.round(restaurant.rating))}☆</span>
+                                            </div>
+                                        </div>
+                                        <div class="order-button">
+                                            <!-- Updated View Menu button -->
+                                            <a href="/api/restaurants/Menu${restaurant.restaurantId}" class="btn btn-primary">View Menu</a>
+                                        </div>
+                                    </div>
+                                `;
+                        // Append the restaurant item to the container
+                        container.insertAdjacentHTML('beforeend', restaurantItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching restaurants:', error);
+                    const container = document.querySelector('.restaurants-section .container');
+                    container.innerHTML = '<p class="text-danger">Failed to load restaurants. Please try again later.</p>';
+                });
+        });
+
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            fetch('/api/restaurants/trending') // Fetch trending restaurants
+                .then(response => response.json())
+                .then(data => {
+                    const trendingContainer = document.getElementById('trending-restaurants');
+
+                    data.forEach(restaurant => {
+                        const trendingCard = `
+                                    <div class="col-md-4">
+                                        <div class="trending-card">
+                                            <img src="${restaurant.imageUrl || '/Images/default-restaurant.jpg'}" alt="${restaurant.restaurantName}">
+                                            <div class="details">
+                                                <h5>${restaurant.restaurantName}</h5>
+                                                <p>${restaurant.description || 'No description available.'}</p>
+                                                <!-- Updated View Menu button -->
+                                                <a href="/api/restaurants/Menu${restaurant.restaurantId}" class="btn btn-success">View Menu</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                        trendingContainer.insertAdjacentHTML('beforeend', trendingCard);
+                    });
+                })
+                .catch(error => console.error('Error fetching trending restaurants:', error));
+        });
+
+    </script>
+</body>
+</html>

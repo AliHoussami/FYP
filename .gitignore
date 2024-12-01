@@ -1,0 +1,32 @@
+# Ignore Visual Studio temporary files, build results, and user-specific files
+.vs/
+bin/
+obj/
+*.suo
+*.user
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Ignore Rider IDE files
+.idea/
+
+# Ignore build directories
+Debug/
+Release/
+
+# Ignore sensitive configuration files
+appsettings.json
+appsettings.Development.json
+
+# Ignore build artifacts for .NET
+*.dll
+*.exe
+*.pdb
+*.cache
+
+# Ignore system files
+.DS_Store
+Thumbs.db

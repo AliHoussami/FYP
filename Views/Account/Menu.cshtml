@@ -1,0 +1,230 @@
+﻿@model IEnumerable<TEST2.Models.MenuItemModel>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Restaurant.RestaurantName</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            position: relative;
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.8)), url(@ViewBag.Restaurant.ImageUrl);
+        }
+
+            .hero-section h1 {
+                font-size: 3.5rem;
+                font-weight: bold;
+                margin-bottom: 15px;
+            }
+
+            .hero-section p {
+                font-size: 1.2rem;
+                font-weight: 300;
+                color: rgba(255, 255, 255, 0.8);
+            }
+
+        /* Restaurant Info Section */
+        .restaurant-info {
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            margin-bottom: 50px;
+        }
+
+            .restaurant-info h2 {
+                font-size: 2.2rem;
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+        .info-group {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+            .info-group:last-child {
+                border-bottom: none;
+            }
+
+            .info-group strong {
+                font-size: 1.1rem;
+                color: #333;
+            }
+
+            .info-group span {
+                font-size: 1rem;
+                color: #777;
+            }
+
+        /* Menu Section */
+        .menu-section {
+            padding: 30px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+
+            .menu-section h2 {
+                font-size: 2.2rem;
+                margin-bottom: 20px;
+                color: #333;
+            }
+
+        .menu-card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+            .menu-card:hover {
+                transform: scale(1.02);
+            }
+
+            .menu-card img {
+                width: 150px;
+                height: 150px;
+                object-fit: cover;
+            }
+
+            .menu-card .details {
+                flex-grow: 1;
+                padding: 15px;
+            }
+
+                .menu-card .details h5 {
+                    font-size: 1.5rem;
+                    font-weight: bold;
+                    margin: 0;
+                    color: #333;
+                }
+
+                .menu-card .details p {
+                    font-size: 1rem;
+                    color: #555;
+                    margin: 8px 0 12px;
+                }
+
+                .menu-card .details .price {
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    color: #28a745;
+                }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div>
+            <h1>@ViewBag.Restaurant.RestaurantName</h1>
+            <p>@ViewBag.Restaurant.Description</p>
+        </div>
+    </div>
+
+    <!-- Restaurant Info Section -->
+    <div class="container">
+        <div class="restaurant-info">
+            <h2>About the Restaurant</h2>
+            <div class="info-group">
+                <strong>Phone:</strong>
+                <span>@ViewBag.Restaurant.Phone</span>
+            </div>
+
+            <div class="info-group">
+                <strong>Email:</strong>
+                <span>@ViewBag.Restaurant.Email</span>
+            </div>
+
+            <div class="info-group">
+                <strong>Address:</strong>
+                <span>@ViewBag.Restaurant.Address</span>
+            </div>
+
+            <div class="info-group">
+                <strong>City:</strong>
+                <span>@ViewBag.Restaurant.City</span>
+            </div>
+
+            <div class="info-group">
+                <strong>Postal Code:</strong>
+                <span>@ViewBag.Restaurant.PostalCode</span>
+            </div>
+
+            <div class="info-group">
+                <strong>Opening Hours:</strong>
+                <span>@ViewBag.Restaurant.OpeningHours</span>
+            </div>
+
+            <div class="info-group">
+                <strong>Rating:</strong>
+                <span>@ViewBag.Restaurant.Rating</span>
+            </div>
+        </div>
+
+        <!-- Menu Section -->
+        <div class="menu-section">
+            <h2>Menu</h2>
+
+            @foreach (var item in Model)
+            {
+                <div class="menu-card">                    
+                    <div class="details">
+                        <h5>@item.ItemName</h5>
+                        <p>@item.Description</p>
+                        <div class="price">$@item.Price</div>
+                        <button class="btn btn-primary add-to-cart">Add to Cart</button>
+                        <!-- Customize Button -->
+                        <button class="btn btn-secondary">Customize</button>
+                    </div>                    
+                </div>
+            }
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <section id="contact" style="padding: 50px 0; background-color: #f1f1f1;">
+        <div class="container text-center">
+            <h2>Contact Us</h2>
+            <p>If you have any questions or feedback, feel free to reach out to us via the following channels:</p>
+            <p><strong>Email:</strong> contact@LEBEATS.com</p>
+            <p><strong>Phone:</strong> 01 111 111</p>
+            <p><strong>Address:</strong> 123 Food Street, Foodie City, FC 45678</p>
+            <p>Follow us on our social media platforms to stay updated!</p>
+            <div>
+                <a href="#" class="btn btn-primary mx-2">Facebook</a>
+                <a href="#" class="btn btn-secondary mx-2">Instagram</a>
+                <a href="#" class="btn btn-info mx-2">Twitter</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
+
