@@ -16,7 +16,7 @@
         }
 
         header {
-            background-color: #333;
+            background-color: #004d40; /* Dark teal */
             color: #fff;
             padding: 15px 0;
         }
@@ -34,6 +34,7 @@
 
                 header nav a:hover {
                     text-decoration: underline;
+                    color: #26a69a; /* Lighter teal */
                 }
 
         .hero-section {
@@ -60,7 +61,17 @@
                 margin-top: 20px;
                 padding: 12px 40px;
                 font-size: 1.2rem;
+                background-color: #388e3c; /* Dark green */
+                color: white;
+                border: none;
+                border-radius: 8px;
+                transition: transform 0.3s, background-color 0.3s;
             }
+
+                .hero-section button:hover {
+                    background-color: #2e7d32; /* Slightly darker green */
+                    transform: scale(1.05);
+                }
 
         /* Trending Restaurants */
         .trending-section {
@@ -71,59 +82,59 @@
             .trending-section h2 {
                 text-align: center;
                 font-size: 2.5rem;
-                color: #333;
+                color: #004d40; /* Dark teal */
                 margin-bottom: 30px;
             }
 
         .trending-card {
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Ensures proper spacing between elements */
-            height: 100%; /* Make all cards the same height */
+            justify-content: space-between;
+            height: 100%;
             border: 1px solid #ddd;
             border-radius: 8px;
             overflow: hidden;
             transition: transform 0.3s;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            text-align: center; /* Centers content inside the card */
+            text-align: center;
         }
 
             .trending-card img {
-                width: 100%; /* Make the image take full width */
-                height: 200px; /* Set consistent height for all images */
-                object-fit: cover; /* Ensures images maintain aspect ratio and fill the space */
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
             }
 
             .trending-card .details {
-                flex-grow: 1; /* Ensures the details section stretches evenly */
                 padding: 15px;
             }
 
             .trending-card h5 {
                 font-size: 1.2rem;
                 font-weight: bold;
-                margin-bottom: 10px; /* Space below the title */
+                color: #004d40; /* Dark teal */
             }
 
             .trending-card p {
                 font-size: 0.95rem;
                 color: #777;
-                margin-bottom: 15px; /* Space below the description */
             }
 
-            .trending-card button {
-                margin-top: auto; /* Push the button to the bottom */
+            .trending-card a {
+                margin-top: auto;
                 padding: 10px 20px;
                 font-size: 1rem;
                 border: none;
                 border-radius: 5px;
-                background-color: #28a745;
+                background-color: #388e3c; /* Dark green */
                 color: white;
-                cursor: pointer;
+                text-decoration: none;
+                transition: transform 0.3s, background-color 0.3s;
             }
 
-                .trending-card button:hover {
-                    background-color: #218838;
+                .trending-card a:hover {
+                    background-color: #2e7d32;
+                    transform: scale(1.05);
                 }
 
         /* Restaurants List */
@@ -134,13 +145,14 @@
             .restaurants-section h2 {
                 text-align: center;
                 font-size: 2.5rem;
-                color: #333;
+                color: #004d40; /* Dark teal */
                 margin-bottom: 30px;
             }
 
         .restaurant-item {
             display: flex;
-            align-items: center;
+            justify-content: space-between; /* Ensure content spreads across the card */
+            align-items: center; /* Vertically align items */
             background: #fff;
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -159,42 +171,47 @@
                 object-fit: cover;
             }
 
-            .restaurant-item .info {
-                flex-grow: 1;
-                padding: 15px;
+            .restaurant-item .info h5 {
+                font-size: 1.3rem;
+                margin: 0;
+                color: #004d40; /* Dark teal */
             }
 
-                .restaurant-item .info h5 {
-                    font-size: 1.3rem;
-                    margin: 0;
-                }
-
-                .restaurant-item .info p {
-                    margin: 10px 0;
-                    color: #555;
-                }
-
-                .restaurant-item .info .rating {
-                    color: #ffc107;
-                }
-
-            .restaurant-item .order-button {
-                padding: 15px;
+            .restaurant-item .info .rating {
+                color: #ffc107; /* Yellow for rating stars */
             }
 
-                .restaurant-item .order-button button {
-                    padding: 10px 20px;
+            .restaurant-item .order-button a {
+                padding: 10px 20px;
+                font-size: 1rem;
+                background-color: #00796b; /* Teal */
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: transform 0.3s, background-color 0.3s;
+            }
+
+                .restaurant-item .order-button a:hover {
+                    background-color: #004d40; /* Dark teal */
+                    transform: scale(1.05);
                 }
 
         /* Footer */
         footer {
-            background-color: #333;
+            background-color: #004d40; /* Dark teal */
             color: #fff;
             text-align: center;
             padding: 20px 0;
         }
 
-        
+            footer a {
+                color: #26a69a; /* Lighter teal */
+                text-decoration: none;
+            }
+
+                footer a:hover {
+                    text-decoration: underline;
+                }
     </style>
 </head>
 <body>
@@ -217,7 +234,7 @@
         <div>
             <h1>Discover the Best Food Near You!</h1>
             <p>Order from top-rated restaurants and get your food delivered fast.</p>
-            <button class="btn btn-primary">Order Now</button>
+            <button>Order Now</button>
         </div>
     </section>
 
@@ -234,13 +251,11 @@
     <!-- Restaurants List -->
     <section class="restaurants-section" id="restaurants">
         <div class="container">
-            <h2>All Restaurants</h2>            
-                
-            </div>
+            <h2>All Restaurants</h2>
+
+        </div>
         </div>
     </section>
-    
-    
 
     <!-- Contact Section -->
     <section id="contact" style="padding: 50px 0; background-color: #f1f1f1;">
@@ -264,9 +279,9 @@
         <p>&copy; 2024 Foodie Paradise. All rights reserved.</p>
         <p>
             Follow us on
-            <a href="#" class="text-white">Facebook</a>,
-            <a href="#" class="text-white">Instagram</a>, and
-            <a href="#" class="text-white">Twitter</a>.
+            <a href="#">Facebook</a>,
+            <a href="#">Instagram</a>, and
+            <a href="#">Twitter</a>.
         </p>
     </footer>
 
@@ -283,21 +298,20 @@
                     // Loop through each restaurant and create the HTML
                     data.forEach(restaurant => {
                         const restaurantItem = `
-                                    <div class="restaurant-item">
-                                        <img src="${restaurant.imageUrl || '/Images/default-restaurant.jpg'}" alt="${restaurant.restaurantName}" class="restaurant-img">
-                                        <div class="info">
-                                            <h5>${restaurant.restaurantName}</h5>
-                                            <p>${restaurant.description || 'No description available.'}</p>
-                                            <div>
-                                                <span class="rating">${'★'.repeat(Math.round(restaurant.rating))}☆</span>
+                                            <div class="restaurant-item">
+                                                <img src="${restaurant.imageUrl || '/Images/default-restaurant.jpg'}" alt="${restaurant.restaurantName}">
+                                                <div class="info">
+                                                    <h5>${restaurant.restaurantName}</h5>
+                                                    <p>${restaurant.description || 'No description available.'}</p>
+                                                    <div>
+                                                        <span class="rating">${'★'.repeat(Math.round(restaurant.rating))}☆</span>
+                                                    </div>
+                                                </div>
+                                                <div class="order-button">
+                                                    <a href="/api/restaurants/Menu${restaurant.restaurantId}">View Menu</a>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="order-button">
-                                            <!-- Updated View Menu button -->
-                                            <a href="/api/restaurants/Menu${restaurant.restaurantId}" class="btn btn-primary">View Menu</a>
-                                        </div>
-                                    </div>
-                                `;
+                                        `;
                         // Append the restaurant item to the container
                         container.insertAdjacentHTML('beforeend', restaurantItem);
                     });
@@ -309,8 +323,6 @@
                 });
         });
 
-    </script>
-    <script>
         document.addEventListener('DOMContentLoaded', () => {
             fetch('/api/restaurants/trending') // Fetch trending restaurants
                 .then(response => response.json())
@@ -319,24 +331,22 @@
 
                     data.forEach(restaurant => {
                         const trendingCard = `
-                                    <div class="col-md-4">
-                                        <div class="trending-card">
-                                            <img src="${restaurant.imageUrl || '/Images/default-restaurant.jpg'}" alt="${restaurant.restaurantName}">
-                                            <div class="details">
-                                                <h5>${restaurant.restaurantName}</h5>
-                                                <p>${restaurant.description || 'No description available.'}</p>
-                                                <!-- Updated View Menu button -->
-                                                <a href="/api/restaurants/Menu${restaurant.restaurantId}" class="btn btn-success">View Menu</a>
+                                            <div class="col-md-4">
+                                                <div class="trending-card">
+                                                    <img src="${restaurant.imageUrl || '/Images/default-restaurant.jpg'}" alt="${restaurant.restaurantName}">
+                                                    <div class="details">
+                                                        <h5>${restaurant.restaurantName}</h5>
+                                                        <p>${restaurant.description || 'No description available.'}</p>
+                                                        <a href="/api/restaurants/Menu${restaurant.restaurantId}">View Menu</a>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                `;
+                                        `;
                         trendingContainer.insertAdjacentHTML('beforeend', trendingCard);
                     });
                 })
                 .catch(error => console.error('Error fetching trending restaurants:', error));
         });
-
     </script>
 </body>
 </html>

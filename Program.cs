@@ -20,7 +20,7 @@ namespace TEST2
            
 
             // Database connection
-            var connectionString = "Server=localhost;Database=projet;User=root;Password=Alinx123@;Port=3306;SslMode=none;AllowPublicKeyRetrieval=True;";
+            var connectionString = "Server=localhost;Database=project;User=root;Password=OFObinx987::;Port=3306;SslMode=none;AllowPublicKeyRetrieval=True;";
             builder.Services.AddDbContext<YourDbContext>(options =>
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 

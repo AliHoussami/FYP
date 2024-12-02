@@ -17,6 +17,13 @@ namespace TEST2.Controllers
         private readonly YourDbContext _context;
         private readonly ILogger<AccountController> _logger;
 
+
+        public IActionResult Cart()
+        {
+            var cartItems = _context.CartItems.ToList();
+            return View(cartItems);
+        }
+
         public AccountController(YourDbContext context, ILogger<AccountController> logger)
         {
             _context = context;
