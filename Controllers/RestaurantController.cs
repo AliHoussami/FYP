@@ -38,6 +38,8 @@ namespace TEST2.Controllers
 
             return Ok(trendingRestaurants);
         }
+
+
         [HttpGet]
         [Route("api/restaurants/Menu{restaurantId}")]
         public IActionResult Menu(int restaurantId)
@@ -45,17 +47,26 @@ namespace TEST2.Controllers
             var restaurant = _context.Restaurants.Find(restaurantId);
             if (restaurant == null)
             {
-                return NotFound(); // Return 404 if the restaurant does not exist
+                return NotFound();
             }
 
             var menuItems = _context.MenuItems
                                     .Where(m => m.RestaurantId == restaurantId)
                                     .ToList();
 
-            ViewBag.Restaurant = restaurant; // Pass restaurant details to the view
+            // Add example customizations for each menu item
+            foreach (var item in menuItems)
+            {
+                item.CustomizationOptions = new List<CustomizationOption>
+        {
+            new CustomizationOption { Name = "Extra Cheese", IsOptional = true, IsExtra = true },
+            new CustomizationOption { Name = "No Sauce", IsOptional = true, IsExtra = false },
+            new CustomizationOption { Name = "Spicy", IsOptional = true, IsExtra = true }
+        };
+            }
 
-            // Explicitly specify the view path
+            ViewBag.Restaurant = restaurant;
             return View("~/Views/Account/Menu.cshtml", menuItems);
-        }      
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TEST2.Models;
 
 namespace TEST2.Controllers
@@ -35,7 +36,6 @@ namespace TEST2.Controllers
         [Route("add")]
         public IActionResult AddToCart([FromBody] CartItemModel cartItem)
         {
-            // Check for null input
             if (cartItem == null || cartItem.MenuItemId <= 0 || cartItem.Quantity <= 0)
             {
                 return BadRequest(new { success = false, message = "Invalid cart item data." });
@@ -47,7 +47,7 @@ namespace TEST2.Controllers
                 return NotFound(new { success = false, message = "Menu item not found." });
             }
 
-            // Add the cart item to the database
+            // Adding the item with customizations
             var newCartItem = new CartItemModel
             {
                 MenuItemId = cartItem.MenuItemId,
@@ -61,6 +61,24 @@ namespace TEST2.Controllers
             _context.SaveChanges();
 
             return Ok(new { success = true, message = "Item added to cart." });
+        }
+
+        [HttpGet("menu/{menuItemId}")]
+        public IActionResult GetMenuItemDetails(int menuItemId)
+        {
+            var menuItem = _context.MenuItems.FirstOrDefault(m => m.MenuItemId == menuItemId);
+
+            if (menuItem == null)
+                return NotFound(new { success = false, message = "Menu item not found." });
+
+            return Ok(new
+            {
+                menuItem.MenuItemId,
+                menuItem.ItemName,
+                menuItem.Description,
+                menuItem.Price,
+                menuItem.CustomizationOptions // Will be returned as a List<string>
+            });
         }
 
         // Update item quantity in the cart
@@ -104,7 +122,7 @@ namespace TEST2.Controllers
         [HttpDelete("clear")]
         public IActionResult ClearCart()
         {
-            var cartItems = _context.CartItems.ToList();
+            var cartItems = _context.CartItems.ToList();    
             if (!cartItems.Any())
             {
                 return BadRequest(new { success = false, message = "Cart is already empty." });

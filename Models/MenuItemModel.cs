@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TEST2.Models
 {
@@ -22,7 +24,9 @@ namespace TEST2.Models
 
         public bool Availability { get; set; }
 
-        
+        public string? ImageUrl { get; set; }
 
+        // Navigation property to link menu items with their customization options
+        public List<CustomizationOption> CustomizationOptions { get; set; } = new List<CustomizationOption>();
     }
 }

@@ -44,6 +44,7 @@ namespace TEST2.Migrations
                     table.PrimaryKey("PK_Users", x => x.UserID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
         }
 
         /// <inheritdoc />

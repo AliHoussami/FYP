@@ -134,25 +134,30 @@
             @foreach (var item in Model)
             {
                 <div class="cart-item">
-                    <div class="cart-item">
+                    <div>
                         <h5>@item.ItemName</h5>
+                        @if (item.Customizations != null && item.Customizations.Any())
+                        {
+                            <small>Customizations: @string.Join(", ", item.Customizations)</small>
+                        }
+                        else
+                        {
+                            <small>No customizations selected.</small>
+                        }
                         <p>Quantity: @item.Quantity</p>
-                        <p>Customizations: @item.Customizations</p>
-                        <p>Price: $@item.Price</p>
-                        <p>Total: $@(item.Price * item.Quantity)</p>
                     </div>
-                    <div class="price">$@(item.Price * item.Quantity)</div>
-                    <button class="btn btn-danger btn-sm" onclick="removeFromCart(@item.CartItemId)">Remove</button>
+                    <div class="price">@($"{item.Price * item.Quantity:C}")</div>
+                    <button class="btn btn-outline-danger btn-sm" onclick="removeFromCart(@item.CartItemId)">Remove</button>
                 </div>
             }
 
             <div class="cart-total">
-                Total: $@(Model.Sum(i => i.Price * i.Quantity))
+                Total: @($"{Model.Sum(i => i.Price * i.Quantity):C}")
             </div>
 
             <div class="cart-actions">
-                <button class="btn btn-secondary" onclick="clearCart()">Clear Cart</button>
-                <a href="/Checkout" class="btn btn-success">Proceed to Checkout</a>
+                <button class="btn btn-outline-secondary" onclick="clearCart()">Clear Cart</button>
+                <a href="@Url.Action("Checkout", "Order")" class="btn btn-primary">Proceed to Checkout</a>
             </div>
         }
         else
