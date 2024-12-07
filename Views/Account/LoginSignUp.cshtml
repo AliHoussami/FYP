@@ -1,22 +1,13 @@
-﻿@model TEST2.Models.loginsignup
+﻿@model TEST2.Models.LoginSignupModel
 
 @{
     ViewData["Title"] = "Login or Signup";
-    var activeTab = ViewBag.ActiveTab ?? ""; // Default to no active form initially
+    var activeTab = ViewBag.ActiveTab ?? "";
 }
 
-<div class="d-flex vh-100">
-    <!-- Left side container for Food Fact and Login/Signup Options -->
+<div class="d-flex justify-content-center align-items-center vh-100">
     <div class="left-container">
-        <!-- Food Fact Box -->
-        <div class="food-fact p-3 d-flex flex-column align-items-start">
-            <h4 class="text-primary mb-2">Did you know?</h4>
-            <p class="fact-text">Avocados are incredibly nutritious and contain more potassium than bananas!</p>
-        </div>
-
-        <!-- Login/Signup Box -->
         <div class="glass-card text-center p-4">
-            <!-- Option Buttons -->
             <h2 class="mb-3">Welcome!</h2>
             <p>Select an option to proceed:</p>
             <div class="d-grid gap-2 mb-3">
@@ -24,92 +15,57 @@
                 <button class="btn btn-primary btn-lg" id="show-signup">Signup</button>
             </div>
 
-            <!-- Login Form (Initially hidden) -->
-            <div id="login-form" class="form-container mt-4" style="display: none;">
+            <!-- Login Form -->
+            <div id="login-form" class="form-container mt-4" style="display: @(activeTab == "login" ? "block" : "none");">
                 <h2 class="mb-3">Login</h2>
-                <form asp-controller="Account" asp-action="Login" method="post" asp-antiforgery="true">
+                <form asp-controller="Account" asp-action="Login" method="post">
                     @Html.AntiForgeryToken()
-                    <div class="form-group mb-2">
-                        <label for="username">Username</label>
-                        <input type="text" id="username" name="Username" class="form-control" required />
-                        <span asp-validation-for="Username" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="Password" class="form-control" required />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Login</button>
+                    <input type="text" name="Username" class="form-control mb-2" placeholder="Username" value="@Model.Login?.Username" required />
+                    <input type="password" name="Password" class="form-control mb-2" placeholder="Password" required />
+                    <button type="submit" class="btn btn-primary w-100">Login</button>
                 </form>
             </div>
 
-            <!-- Signup Form (Initially hidden) -->
-            <div id="signup-form" class="form-container mt-4" style="display: none;">
+            <!-- Signup Form -->
+            <div id="signup-form" class="form-container mt-4" style="display: @(activeTab == "signup" ? "block" : "none");">
                 <h2 class="mb-3">Signup</h2>
-                <form asp-controller="Account" asp-action="Signup" method="post" asp-antiforgery="true">
+                <form asp-controller="Account" asp-action="Signup" method="post">
                     @Html.AntiForgeryToken()
 
                     <div class="form-group mb-2">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" name="Email" class="form-control" placeholder="Enter your email" required />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <label for="FirstName">First Name</label>
+                        <input type="text" name="FirstName" class="form-control" placeholder="First Name" value="@Model.Signup?.FirstName" required />
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" name="Username" class="form-control" placeholder="Enter your username" required />
-                        <span asp-validation-for="Username" class="text-danger"></span>
+                        <label for="LastName">Last Name</label>
+                        <input type="text" name="LastName" class="form-control" placeholder="Last Name" value="@Model.Signup?.LastName" required />
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" name="Password" class="form-control" placeholder="Enter your password" required />
-                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <label for="Email">Email</label>
+                        <input type="email" name="Email" class="form-control" placeholder="Email" value="@Model.Signup?.Email" required />
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="firstName" class="form-label">First Name</label>
-                        <input type="text" name="FirstName" class="form-control" placeholder="Enter your first name" required />
-                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                        <label for="Username">Username</label>
+                        <input type="text" name="Username" class="form-control" placeholder="Username" value="@Model.Signup?.Username" required />
                     </div>
 
                     <div class="form-group mb-2">
-                        <label for="lastName" class="form-label">Last Name</label>
-                        <input type="text" name="LastName" class="form-control" placeholder="Enter your last name" required />
-                        <span asp-validation-for="LastName" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="phone" class="form-label">Phone</label>
-                        <input type="text" name="Phone" class="form-control" placeholder="Enter your phone number" />
-                        <span asp-validation-for="Phone" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="address" class="form-label">Address</label>
-                        <input type="text" name="Address" class="form-control" placeholder="Enter your address" />
-                        <span asp-validation-for="Address" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="city" class="form-label">City</label>
-                        <input type="text" name="City" class="form-control" placeholder="Enter your city" />
-                        <span asp-validation-for="City" class="text-danger"></span>
-                    </div>
-
-                    <div class="form-group mb-2">
-                        <label for="postalCode" class="form-label">Postal Code</label>
-                        <input type="text" name="PostalCode" class="form-control" placeholder="Enter your postal code" />
-                        <span asp-validation-for="PostalCode" class="text-danger"></span>
+                        <label for="Password">Password</label>
+                        <input type="password" name="Password" class="form-control" placeholder="Password" required />
                     </div>
 
                     <button type="submit" class="btn btn-primary w-100 mt-2">Signup</button>
                 </form>
 
-                <!-- Google Signup Button -->
-                <a asp-action="SignupWithGoogle" asp-controller="Account" class="btn btn-danger w-100 mt-2">Sign up with Google</a>
+                <!-- Signup with Google Button -->
+                <a asp-action="SignupWithGoogle" asp-controller="Account" class="btn btn-danger w-100 mt-3">
+                    <i class="fa fa-google"></i> Signup with Google
+                </a>
             </div>
+
         </div>
     </div>
 </div>
@@ -122,7 +78,6 @@
         font-family: 'Poppins', sans-serif;
         margin: 0;
         height: 100vh;
-        overflow: hidden;
     }
 
     .vh-100 {
@@ -130,66 +85,31 @@
     }
 
     .left-container {
-        display: flex;
-        flex-direction: column;
-        position: absolute;
-        top: 100px;
-        left: 800px;
-        gap: 20px;
+        max-width: 400px;
+        width: 100%;
     }
 
     .food-fact {
-        width: 300px;
-        padding: 20px;
         background: rgba(0, 0, 0, 0.85);
         color: #fff;
         font-size: 18px;
         border-radius: 10px;
     }
 
-        .food-fact h4 {
-            font-family: 'Brush Script MT', cursive;
-            font-size: 28px;
-            color: #ffa500;
-            margin-bottom: 10px;
-        }
-
-    .fact-text {
-        font-size: 20px;
-        line-height: 1.6;
-        font-style: italic;
-    }
-
     .glass-card {
-        width: 300px;
         background: rgba(255, 255, 255, 0.13);
         backdrop-filter: blur(10px);
-        border-radius: 10px;
         border: 2px solid rgba(255, 255, 255, 0.1);
         box-shadow: 0 0 40px rgba(8, 7, 16, 0.6);
         color: #fff;
         padding: 20px;
+        border-radius: 10px;
     }
 
     .form-control {
-        width: 100%;
-        border: 1px solid #ced4da;
-        border-radius: 4px;
-        padding: 8px;
-        color: #fff;
         background: rgba(255, 255, 255, 0.4);
+        color: #fff;
     }
-
-        .form-control::placeholder {
-            color: #e5e5e5;
-            opacity: 1;
-        }
-
-        .form-control:focus {
-            box-shadow: none;
-            border-color: darkgray;
-            background: rgba(255, 255, 255, 0.6);
-        }
 
     .btn-primary, .btn-danger {
         font-size: 16px;
@@ -199,12 +119,10 @@
 
     .btn-primary {
         background-color: darkgrey;
-        color: #fff;
     }
 
     .btn-danger {
         background-color: #dc3545;
-        color: #fff;
     }
 
     .text-primary {

@@ -17,10 +17,6 @@ obj/
 Debug/
 Release/
 
-# Ignore sensitive configuration files
-appsettings.json
-appsettings.Development.json
-
 # Ignore build artifacts for .NET
 *.dll
 *.exe

@@ -17,6 +17,10 @@ namespace TEST2.Controllers
         private readonly YourDbContext _context;
         private readonly ILogger<AccountController> _logger;
 
+        public IActionResult Home()
+        {
+            return View(); // This will look for Views/Account/Home.cshtml
+        }
 
         public IActionResult Cart()
         {
@@ -33,7 +37,7 @@ namespace TEST2.Controllers
         [HttpGet]
         public IActionResult LoginSignup()
         {
-            return View(new loginsignup());
+            return View(new LoginSignupModel());
         }
 
         [HttpPost]
@@ -48,7 +52,7 @@ namespace TEST2.Controllers
                 }
 
                 ViewBag.ActiveTab = "login";
-                return View("LoginSignup", model);
+                return View("LoginSignup", new LoginSignupModel { Login = model });
             }
 
             try
@@ -59,10 +63,9 @@ namespace TEST2.Controllers
                 {
                     ModelState.AddModelError(string.Empty, "Invalid username or password.");
                     ViewBag.ActiveTab = "login";
-                    return View("LoginSignup", model);
+                    return View("LoginSignup", new LoginSignupModel { Login = model });
                 }
 
-                // Successful login logic
                 return RedirectToAction("Home", "Account");
             }
             catch (Exception ex)
@@ -72,8 +75,9 @@ namespace TEST2.Controllers
             }
 
             ViewBag.ActiveTab = "login";
-            return View("LoginSignup", model);
+            return View("LoginSignup", new LoginSignupModel { Login = model });
         }
+
 
 
 
@@ -84,14 +88,13 @@ namespace TEST2.Controllers
             if (!ModelState.IsValid)
             {
                 ViewBag.ActiveTab = "signup";
-                return View("LoginSignup", model);
+                return View("LoginSignup", new LoginSignupModel { Signup = model });
             }
+
             try
             {
-                // Hash the password
                 var passwordHash = HashPassword(model.Password);
 
-                // Create a new user object
                 var newUser = new Users
                 {
                     FirstName = model.FirstName,
@@ -99,30 +102,31 @@ namespace TEST2.Controllers
                     Email = model.Email,
                     PasswordHash = passwordHash,
                     Username = model.Username,
-                    Phone = model.Phone ?? "Not provided",  // Provide default values if optional
+                    Phone = model.Phone ?? "Not provided",
                     Address = model.Address ?? "Not provided",
                     City = model.City ?? "Not provided",
                     PostalCode = model.PostalCode ?? "Not provided",
-                    UserType = "Customer"  // Assuming a default user type
+                    UserType = "Customer"
                 };
 
-                // Add the new user to the database
                 _context.Users.Add(newUser);
+                _logger.LogInformation("Attempting to save new user to database.");
                 _context.SaveChanges();
+                _logger.LogInformation("User saved successfully.");
 
-                // Redirect to the Home page after signup
                 return RedirectToAction("Home", "Account");
             }
             catch (Exception ex)
             {
-                // Log the exception for debugging
                 _logger.LogError($"Error saving user: {ex.Message}");
                 ModelState.AddModelError(string.Empty, "An error occurred while saving your data.");
+                return View("LoginSignup", new LoginSignupModel { Signup = model });
             }
 
             ViewBag.ActiveTab = "signup";
-            return View("LoginSignup", model);
+            return View("LoginSignup", new LoginSignupModel { Signup = model });
         }
+
 
         // Google Login action
         [HttpGet("LoginWithGoogle")]
@@ -141,6 +145,7 @@ namespace TEST2.Controllers
             var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
             return Challenge(properties, GoogleDefaults.AuthenticationScheme);
         }
+
 
         // Google response callback after authentication
         [HttpGet]
@@ -205,10 +210,6 @@ namespace TEST2.Controllers
 
             // Redirect to the homepage after successful registration
             return RedirectToAction("Index", "Home");
-        }
-        public IActionResult Home()
-        {
-            return View(); // Ensure the "Views/Account/Home.cshtml" exists
         }
 
         private string HashPassword(string password)
