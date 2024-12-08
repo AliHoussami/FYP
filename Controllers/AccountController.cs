@@ -19,7 +19,7 @@ namespace TEST2.Controllers
 
         public IActionResult Home()
         {
-            return View(); // This will look for Views/Account/Home.cshtml
+            return View();
         }
 
         public IActionResult Cart()
@@ -66,6 +66,7 @@ namespace TEST2.Controllers
                     return View("LoginSignup", new LoginSignupModel { Login = model });
                 }
 
+                // Successful login - redirect to the Home action
                 return RedirectToAction("Home", "Account");
             }
             catch (Exception ex)
@@ -77,8 +78,6 @@ namespace TEST2.Controllers
             ViewBag.ActiveTab = "login";
             return View("LoginSignup", new LoginSignupModel { Login = model });
         }
-
-
 
 
         [HttpPost]
@@ -93,8 +92,10 @@ namespace TEST2.Controllers
 
             try
             {
+                // Hash the password
                 var passwordHash = HashPassword(model.Password);
 
+                // Create a new user
                 var newUser = new Users
                 {
                     FirstName = model.FirstName,
@@ -109,22 +110,20 @@ namespace TEST2.Controllers
                     UserType = "Customer"
                 };
 
+                // Save the new user to the database
                 _context.Users.Add(newUser);
-                _logger.LogInformation("Attempting to save new user to database.");
                 _context.SaveChanges();
-                _logger.LogInformation("User saved successfully.");
 
+                // Redirect to the Home page after successful signup
                 return RedirectToAction("Home", "Account");
             }
             catch (Exception ex)
             {
                 _logger.LogError($"Error saving user: {ex.Message}");
                 ModelState.AddModelError(string.Empty, "An error occurred while saving your data.");
+                ViewBag.ActiveTab = "signup";
                 return View("LoginSignup", new LoginSignupModel { Signup = model });
             }
-
-            ViewBag.ActiveTab = "signup";
-            return View("LoginSignup", new LoginSignupModel { Signup = model });
         }
 
 
@@ -151,10 +150,8 @@ namespace TEST2.Controllers
         [HttpGet]
         public async Task<IActionResult> GoogleResponse()
         {
-            // Log start of the method
             _logger.LogInformation("Entering GoogleResponse method");
 
-            // Attempt to get authentication info
             var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (result == null || !result.Succeeded)
             {
@@ -162,35 +159,31 @@ namespace TEST2.Controllers
                 return RedirectToAction("LoginSignup");
             }
 
-            // Retrieve user info from Google claims
             var email = result.Principal.FindFirstValue(ClaimTypes.Email) ?? "unknown";
             var firstName = result.Principal.FindFirstValue(ClaimTypes.GivenName) ?? "Unknown";
             var lastName = result.Principal.FindFirstValue(ClaimTypes.Surname) ?? "User";
 
             _logger.LogInformation($"Retrieved Google user info - Email: {email}, First Name: {firstName}, Last Name: {lastName}");
 
-            // Check if the user already exists in the database
             var existingUser = _context.Users.FirstOrDefault(u => u.Email == email);
             if (existingUser != null)
             {
                 _logger.LogInformation("User already exists in the database. Redirecting to homepage.");
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Home", "Account");
             }
 
-            // New Google user - create a new record in the database
             var newUser = new Users
             {
                 FirstName = firstName,
                 LastName = lastName,
                 Email = email,
                 UserType = "Customer",
-                Address = "Not provided", // Placeholder values for fields not provided by Google
+                Address = "Not provided",
                 City = "Not provided",
                 PostalCode = "Not provided",
                 Phone = "Not provided",
-                PasswordHash = "GoogleOAuth", // Placeholder for password field since it’s not used with OAuth
+                PasswordHash = "GoogleOAuth",
                 Username = firstName + lastName
-
             };
 
             _context.Users.Add(newUser);
@@ -208,7 +201,6 @@ namespace TEST2.Controllers
                 return RedirectToAction("LoginSignup");
             }
 
-            // Redirect to the homepage after successful registration
             return RedirectToAction("Index", "Home");
         }
 
