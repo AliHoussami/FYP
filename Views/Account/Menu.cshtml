@@ -1,5 +1,4 @@
-﻿<!-- Inside Menu.cshtml -->
-@model IEnumerable<TEST2.Models.MenuItemModel>
+﻿@model IEnumerable<TEST2.Models.MenuItemModel>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,19 +12,18 @@
         /* General Styles */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #e8f5f5; /* Light teal background */
+            background-color: #e8f5f5;
             margin: 0;
             padding: 0;
         }
 
         .menu-card {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
             border: 1px solid #ddd;
             border-radius: 8px;
-            overflow: hidden;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 20px;
             transition: transform 0.3s;
         }
 
@@ -33,29 +31,17 @@
                 transform: scale(1.02);
             }
 
-            .menu-card img {
-                width: 150px;
-                height: 150px;
-                object-fit: cover;
+            .menu-card .details h5 {
+                font-size: 1.5rem;
+                font-weight: bold;
+                color: #004d40;
             }
 
-            .menu-card .details {
-                flex-grow: 1;
-                padding: 15px;
+            .menu-card .details .price {
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #388e3c;
             }
-
-                .menu-card .details h5 {
-                    font-size: 1.5rem;
-                    font-weight: bold;
-                    margin: 0;
-                    color: #004d40; /* Dark teal */
-                }
-
-                .menu-card .details .price {
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    color: #388e3c; /* Dark green */
-                }
 
         .customization-dropdown {
             display: none;
@@ -66,32 +52,34 @@
             background-color: #f8f9fa;
         }
 
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+            .btn-primary:hover {
+                background-color: #0056b3;
+            }
+
         .view-cart {
-            background-color: #000000; /* Black background */
-            color: #008080; /* Teal text */
+            background-color: #000000;
+            color: #008080;
             font-weight: bold;
-            font-size: 1.2rem;
             padding: 10px 20px;
             border: 2px solid #008080;
-            text-transform: uppercase;
+            border-radius: 8px;
             text-decoration: none;
-            display: inline-block;
-            border-radius: 8px; /* Rounded corners */
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 5px 10px rgba(0, 128, 128, 0.5);
+            transition: all 0.3s ease;
         }
 
             .view-cart:hover {
-                background-color: #008080; /* Teal background */
-                color: #ffffff; /* White text */
-                transform: scale(1.1); /* Slight zoom effect */
-                box-shadow: 0 8px 16px rgba(0, 128, 128, 0.8);
+                background-color: #008080;
+                color: #ffffff;
+                transform: scale(1.1);
             }
-
     </style>
 </head>
 <body>
-
     <div class="container">
         <div class="menu-section">
             <h2>Menu</h2>
@@ -102,139 +90,109 @@
                         <h5>@item.ItemName</h5>
                         <p>@item.Description</p>
                         <div class="price">$@item.Price</div>
-                        <button class="btn btn-primary add-to-cart" data-id="@item.MenuItemId" onclick="addToCart(this)">
+
+                        <!-- Quantity Input -->
+                        <div class="mb-2">
+                            <label for="quantity_@item.MenuItemId">Quantity:</label>
+                            <input type="number" id="quantity_@item.MenuItemId" class="form-control" value="1" min="1" />
+                        </div>
+
+                        <!-- Add to Cart Button -->
+                        <button class="btn btn-primary" onclick="addToCart(@item.MenuItemId)">
                             Add to Cart
                         </button>
 
-                        <!-- Customization Options -->
-                        <button class="btn btn-secondary customize-btn" onclick="toggleCustomizationDropdown(this)">
+                        <!-- Customize Button -->
+                        <button class="btn btn-secondary mt-2" onclick="toggleCustomizationDropdown(this)">
                             Customize
                         </button>
-                        <div class="customization-dropdown" style="display:none;">
+
+                        <!-- Customization Dropdown -->
+                        <div class="customization-dropdown">
                             @foreach (var option in item.CustomizationOptions)
                             {
                                 <div>
-                                    <input type="checkbox" id="@option.Name" value="@option.Name" />
-                                    <label for="@option.Name">@option.Name</label>
+                                    <input type="checkbox" id="customOption_@option.CustomizationId" value="@option.Name" />
+                                    <label for="customOption_@option.CustomizationId">@option.Name</label>
                                 </div>
                             }
-                            <button class="btn btn-primary" onclick="submitCustomization(this)">Add Customization</button>
+
+                            <div class="mt-2">
+                                <input type="text" class="form-control" id="customNote_@item.MenuItemId" placeholder="Enter custom notes" />
+                            </div>
+
+                            <!-- Add Customization Button -->
+                            <button class="btn btn-primary mt-2" onclick="addToCartWithCustomizations(@item.MenuItemId)">
+                                Add Customization
+                            </button>
                         </div>
                     </div>
                 </div>
-
             }
         </div>
+
+        <!-- View Cart Button -->
         <div class="text-end mb-3">
             <a href="@Url.Action("Cart", "Account")" class="btn view-cart">View Cart</a>
         </div>
-
-
     </div>
 
+    <!-- JavaScript for Handling Cart Actions -->
     <script>
-        // Add to Cart Functionality
-        function addToCart(button) {
-            const menuItemId = button.getAttribute('data-id');
-            const cartData = {
-                MenuItemId: parseInt(menuItemId),
-                Quantity: 1,
-                Customizations: ""
-            };
-
-            fetch('/api/cart/add', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(cartData)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Item successfully added to cart!");
-                    } else {
-                        alert(data.message || "Failed to add item to cart.");
-                    }
-                })
-                .catch(error => {
-                    console.error("Error adding item to cart:", error);
-                    alert("An error occurred. Please try again.");
-                });
-        }
-
-        // Toggle Customization Dropdown
-
+        // Toggle the Customization Dropdown
         function toggleCustomizationDropdown(button) {
-            const menuItemId = button.getAttribute('data-id');
-            const menuCard = button.closest('.menu-card');
-            let dropdown = menuCard.querySelector('.customization-dropdown');
-
-            if (!dropdown) {
-                // Create dropdown if it doesn't exist
-                dropdown = document.createElement('div');
-                dropdown.className = 'customization-dropdown mt-3';
-                menuCard.appendChild(dropdown);
-
-                // Fetch customizations for this MenuItemId
-                fetch(`/api/cart/customizations/${menuItemId}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success !== false) {
-                            dropdown.innerHTML = `
-                                            <label for="customization">Choose Customization:</label>
-                                            <select class="form-select mb-3" id="customization">
-                                                ${data.map(option => `<option value="${option}">${option}</option>`).join("")}
-                                            </select>
-                                            <label for="quantity">Quantity:</label>
-                                            <input type="number" class="form-control mb-3" id="quantity" value="1" min="1">
-                                            <button class="btn btn-primary" onclick="submitCustomization(this)">Add Customization</button>`;
-                        } else {
-                            dropdown.innerHTML = `<p class="text-danger">No customizations available for this item.</p>`;
-                        }
-                    })
-                    .catch(err => console.error("Error fetching customizations:", err));
-            } else {
-                // Toggle dropdown visibility
-                dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-            }
+            const dropdown = button.nextElementSibling;
+            dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
         }
 
-        //CUSTOMIZE
-        function submitCustomization(button) {
-            const dropdown = button.closest('.customization-dropdown');
-            const menuItemId = button.closest('.menu-card').querySelector('.add-to-cart').getAttribute('data-id');
-
-            // Gather selected customizations
-            const selectedOptions = Array.from(dropdown.querySelectorAll('input[type="checkbox"]:checked'))
-                .map(input => input.value);
-
-            if (!menuItemId || selectedOptions.length === 0) {
-                alert("Please select at least one customization.");
-                return;
-            }
-
-            const cartData = {
-                MenuItemId: parseInt(menuItemId),
-                Quantity: 1,
-                Customizations: selectedOptions
-            };
+        // Add to Cart without Customizations
+        function addToCart(menuItemId) {
+            const quantity = document.getElementById(`quantity_${menuItemId}`).value;
 
             fetch('/api/cart/add', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(cartData)
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    MenuItemId: menuItemId,
+                    Quantity: parseInt(quantity),
+                    Customizations: ''
+                })
             })
                 .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        alert("Customization added to cart!");
-                        dropdown.style.display = 'none';
-                    } else {
-                        alert("Failed to add customization.");
-                    }
-                })
-                .catch(err => console.error("Error adding customization:", err));
+                .then(data => alert(data.message))
+                .catch(error => console.error('Error:', error));
         }
 
+        // Add to Cart with Customizations
+        function addToCartWithCustomizations(menuItemId) {
+            const quantity = document.getElementById(`quantity_${menuItemId}`).value;
+            const customNote = document.getElementById(`customNote_${menuItemId}`).value;
+
+            // Collect all checked customization options
+            const selectedOptions = Array.from(document.querySelectorAll(`#customOption_${menuItemId}:checked`))
+                .map(checkbox => checkbox.value)
+                .join(', ');
+
+            // Combine the custom note and selected options
+            const customizations = [selectedOptions, customNote].filter(c => c).join(', ');
+
+            fetch('/api/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    MenuItemId: menuItemId,
+                    Quantity: parseInt(quantity),
+                    Customizations: customizations
+                })
+            })
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => console.error('Error:', error));
+        }
     </script>
 </body>
 </html>

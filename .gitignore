@@ -26,7 +26,3 @@ Release/
 # Ignore system files
 .DS_Store
 Thumbs.db
-
-# Ignore appsettings files containing sensitive data
-appsettings.json
-appsettings.Development.json

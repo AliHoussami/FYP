@@ -21,7 +21,7 @@ namespace TEST2.Controllers
         {
             return View();
         }
-
+    
         public IActionResult Cart()
         {
             var cartItems = _context.CartItems.ToList();
@@ -35,8 +35,10 @@ namespace TEST2.Controllers
         }
 
         [HttpGet]
-        public IActionResult LoginSignup()
+        public IActionResult LoginSignup(bool isAdmin = false)
         {
+            ViewBag.IsAdmin = isAdmin;
+            ViewBag.ActiveTab = isAdmin ? "login" : string.Empty; // Default to login for Admin mode
             return View(new LoginSignupModel());
         }
 
@@ -69,7 +71,7 @@ namespace TEST2.Controllers
                 // Successful login - redirect to the Home action
                 return RedirectToAction("Home", "Account");
             }
-            catch (Exception ex)
+            catch (System.Exception ex)
             {
                 _logger.LogError($"Error during login: {ex.Message}");
                 ModelState.AddModelError(string.Empty, "An unexpected error occurred.");

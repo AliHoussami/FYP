@@ -5,8 +5,6 @@ namespace TEST2.Models
 {
     public class CustomizationOption
     {
-        
-
         [Key]
         public int CustomizationId { get; set; }
 

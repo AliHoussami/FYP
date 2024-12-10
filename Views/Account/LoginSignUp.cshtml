@@ -15,6 +15,12 @@
                 <button class="btn btn-primary btn-lg" id="show-signup">Signup</button>
             </div>
 
+            <!-- Admin Login Button -->
+            <div class="d-grid gap-2 mb-3">
+                <a href="@Url.Action("RestaurantManagement", "Admin")" class="btn btn-danger btn-lg">Admin Panel</a>
+            </div>
+
+
             <!-- Login Form -->
             <div id="login-form" class="form-container mt-4" style="display: @(activeTab == "login" ? "block" : "none");">
                 <h2 class="mb-3">Login</h2>
@@ -90,8 +96,6 @@
                     <i class="fa fa-google"></i> Signup with Google
                 </a>
             </div>
-
-
         </div>
     </div>
 </div>

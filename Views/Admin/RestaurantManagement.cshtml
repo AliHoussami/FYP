@@ -1,0 +1,121 @@
+﻿@model dynamic
+@{
+    ViewData["Title"] = "Restaurant Management";
+}
+
+<h2>Restaurant Management</h2>
+
+<!-- Tabs for List, Add, and Edit -->
+<ul class="nav nav-tabs" id="adminTab" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link active" id="list-tab" data-toggle="tab" href="#list" role="tab">List Restaurants</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="add-tab" data-toggle="tab" href="#add" role="tab">Add Restaurant</a>
+    </li>
+    @if (ViewBag.EditRestaurant != null)
+    {
+        <li class="nav-item">
+            <a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab">Edit Restaurant</a>
+        </li>
+    }
+</ul>
+
+<div class="tab-content mt-3" id="adminTabContent">
+
+    <!-- List Restaurants -->
+    <div class="tab-pane fade show active" id="list" role="tabpanel">
+        <h4>Restaurant List</h4>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>City</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var restaurant in ViewBag.Restaurants)
+                {
+                    <tr>
+                        <td>@restaurant.RestaurantName</td>
+                        <td>@restaurant.Address</td>
+                        <td>@restaurant.City</td>
+                        <td>@restaurant.Phone</td>
+                        <td>@restaurant.Email</td>
+                        <td>
+                            <form asp-action="DeleteRestaurant" method="post" style="display:inline;">
+                                <input type="hidden" name="id" value="@restaurant.RestaurantId" />
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                            <a href="@Url.Action("RestaurantManagement", "Admin", new { id = restaurant.RestaurantId })" class="btn btn-warning btn-sm">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add Restaurant -->
+    <div class="tab-pane fade" id="add" role="tabpanel">
+        <h4>Add New Restaurant</h4>
+        <form asp-action="AddRestaurant" method="post">
+            <div class="form-group">
+                <label for="RestaurantName">Name</label>
+                <input type="text" name="RestaurantName" class="form-control" required />
+            </div>
+            <div class="form-group">
+                <label for="Address">Address</label>
+                <input type="text" name="Address" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="City">City</label>
+                <input type="text" name="City" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Phone">Phone</label>
+                <input type="text" name="Phone" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Email">Email</label>
+                <input type="email" name="Email" class="form-control" />
+            </div>
+            <button type="submit" class="btn btn-primary">Add Restaurant</button>
+        </form>
+    </div>
+
+    <!-- Edit Restaurant -->
+    @if (ViewBag.EditRestaurant != null)
+    {
+        <div class="tab-pane fade" id="edit" role="tabpanel">
+            <h4>Edit Restaurant</h4>
+            <form asp-action="EditRestaurant" method="post">
+                <input type="hidden" name="RestaurantId" value="@ViewBag.EditRestaurant.RestaurantId" />
+                <div class="form-group">
+                    <label for="RestaurantName">Name</label>
+                    <input type="text" name="RestaurantName" class="form-control" value="@ViewBag.EditRestaurant.RestaurantName" required />
+                </div>
+                <div class="form-group">
+                    <label for="Address">Address</label>
+                    <input type="text" name="Address" class="form-control" value="@ViewBag.EditRestaurant.Address" />
+                </div>
+                <div class="form-group">
+                    <label for="City">City</label>
+                    <input type="text" name="City" class="form-control" value="@ViewBag.EditRestaurant.City" />
+                </div>
+                <div class="form-group">
+                    <label for="Phone">Phone</label>
+                    <input type="text" name="Phone" class="form-control" value="@ViewBag.EditRestaurant.Phone" />
+                </div>
+                <div class="form-group">
+                    <label for="Email">Email</label>
+                    <input type="email" name="Email" class="form-control" value="@ViewBag.EditRestaurant.Email" />
+                </div>
+                <button type="submit" class="btn btn-success">Update Restaurant</button>
+            </form>
+        </div>
+    }
+</div>

@@ -136,9 +136,9 @@
                 <div class="cart-item">
                     <div>
                         <h5>@item.ItemName</h5>
-                        @if (item.Customizations != null && item.Customizations.Any())
+                        @if (!string.IsNullOrWhiteSpace(item.Customizations))
                         {
-                            <small>Customizations: @string.Join(", ", item.Customizations)</small>
+                            <small>Customizations: @item.Customizations</small>
                         }
                         else
                         {
@@ -172,51 +172,33 @@
 
     <script>
         function removeFromCart(cartItemId) {
-            if (confirm("Are you sure you want to remove this item from the cart?")) {
-                showLoadingSpinner();
-                fetch(`/api/cart/remove/${cartItemId}`, {
-                    method: 'DELETE'
+            fetch(`/api/cart/remove/${cartItemId}`, {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        hideLoadingSpinner();
-                        if (data.success) {
-                            alert('Item removed from cart.');
-                            location.reload();
-                        } else {
-                            alert('Failed to remove item.');
-                        }
-                    })
-                    .catch(error => {
-                        hideLoadingSpinner();
-                        console.error('Error removing item:', error);
-                        alert('An error occurred. Please try again.');
-                    });
-            }
+                .catch(error => console.error('Error:', error));
         }
 
         function clearCart() {
-            if (confirm("Are you sure you want to clear the entire cart?")) {
-                showLoadingSpinner();
-                fetch('/api/cart/clear', {
-                    method: 'DELETE'
+            fetch('/api/cart/clear', {
+                method: 'DELETE'
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.reload();
+                    } else {
+                        alert(data.message);
+                    }
                 })
-                    .then(response => response.json())
-                    .then(data => {
-                        hideLoadingSpinner();
-                        if (data.success) {
-                            alert('Cart cleared.');
-                            location.reload();
-                        } else {
-                            alert('Failed to clear cart.');
-                        }
-                    })
-                    .catch(error => {
-                        hideLoadingSpinner();
-                        console.error('Error clearing cart:', error);
-                        alert('An error occurred. Please try again.');
-                    });
-            }
+                .catch(error => console.error('Error:', error));
         }
 
         function showLoadingSpinner() {
